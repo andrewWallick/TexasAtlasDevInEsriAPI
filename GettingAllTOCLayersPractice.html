@@ -1,0 +1,46 @@
+<html>
+<head>
+
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+
+
+<script>
+    $.getJSON( "http://texasatlas.arch.tamu.edu:6080/arcgis/rest/services/CA?f=pjson",handleGet);
+
+    var serviceFolderLinks = [];
+
+
+    function handleGet(data)
+    {
+        $.each( data.services, handleItem);
+
+
+
+
+    }
+
+    function handleItem( index, service )
+    {
+        var folderName = service.name.substring(2, service.name.length);
+
+
+        serviceFolderLinks.push("http://texasatlas.arch.tamu.edu:6080/arcgis/rest/services/CA" +folderName);
+
+        var list2 = $("#list2");
+        list2.append("<li>" + serviceFolderLinks[index] + "</li>" );
+
+        var list = $("#list");
+        list.append("<li>" + folderName + "</li>" );
+
+
+    }
+</script>
+
+</head>
+<body>
+
+    <ul id="list"></ul>
+    <ul id="list2"></ul>
+
+</body>
+</html>
