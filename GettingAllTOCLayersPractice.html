@@ -5,17 +5,38 @@
 
 
 <script>
-    $.getJSON( "http://texasatlas.arch.tamu.edu:6080/arcgis/rest/services/CA?f=pjson",handleGet);
+    $.getJSON( "http://texasatlas.arch.tamu.edu:6080/arcgis/rest/services?f=pjson",getFolders);
 
+    var folderLinks = [];
     var serviceFolderLinks = [];
 
+    function getFolders(data)
+    {
+        $.each( data.folders, makeFolderLinks);
+
+    }
+
+    function makeFolderLinks( index, folder )
+    {
+        var folderName = folder;
+
+
+        folderLinks.push("http://texasatlas.arch.tamu.edu:6080/arcgis/rest/services/" +folderName);
+
+
+
+        var list = $("#folderList");
+        list.append("<li>" + folderName + "</li>" );
+
+        var linksList = $("#folderLinks");
+        linksList.append("<li>" + serviceFolderLinks[index] + "</li>" );
+
+
+    }
 
     function handleGet(data)
     {
         $.each( data.services, handleItem);
-
-
-
 
     }
 
@@ -39,8 +60,13 @@
 </head>
 <body>
 
-    <ul id="list"></ul>
-    <ul id="list2"></ul>
+    <ul id="folderList">
+        <ul id="list"></ul>
+    </ul>
+
+    <ul id="folderLinks">
+        <ul id="list2"></ul>
+    </ul>
 
 </body>
 </html>
