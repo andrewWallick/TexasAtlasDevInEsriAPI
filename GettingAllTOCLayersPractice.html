@@ -21,16 +21,23 @@
         var folderName = folder;
 
 
-        folderLinks.push("http://texasatlas.arch.tamu.edu:6080/arcgis/rest/services/" +folderName);
-
+        folderLinks.push("http://texasatlas.arch.tamu.edu:6080/arcgis/rest/services/" +folderName + "?f=pjson");
+        //jsonFolderLinks
 
 
         var list = $("#folderList");
         list.append("<li>" + folderName + "</li>" );
 
         var linksList = $("#folderLinks");
-        linksList.append("<li>" + serviceFolderLinks[index] + "</li>" );
+        linksList.append("<li>" + folderLinks[index] + "</li>" );
 
+        getSubfolderData(folderLinks[index]);
+
+
+    }
+
+    function getSubfolderData(link){
+        $.getJSON( link, handleGet);
 
     }
 
