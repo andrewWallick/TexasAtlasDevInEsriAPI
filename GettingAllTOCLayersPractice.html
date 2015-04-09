@@ -9,6 +9,8 @@
 
     var folderLinks = [];
     var serviceFolderLinks = [];
+    var currentList;
+    var currentIndex;
 
     function getFolders(data)
     {
@@ -19,19 +21,26 @@
     function makeFolderLinks( index, folder )
     {
         var folderName = folder;
-
+        currentIndex = index;
 
         folderLinks.push("http://texasatlas.arch.tamu.edu:6080/arcgis/rest/services/" +folderName + "?f=pjson");
         //jsonFolderLinks
 
 
         var list = $("#folderList");
-        list.append("<li>" + folderName + "</li>" );
+        list.append("<li>" + folderName + "<ul id=\"sublist" +index+ "\"><li>red</li></ul>"+"</li>" );
 
         var linksList = $("#folderLinks");
-        linksList.append("<li>" + folderLinks[index] + "</li>" );
+        linksList.append("<li>" + folderLinks[index] +  "</li>" );
+
+//        currentList = $("#item" +index);
+//        currentList.append("<ul id=\"sublist\"" +index+ "></ul>");
 
         getSubfolderData(folderLinks[index]);
+
+        //extra testing code. Should put "test" in the list
+        var list5 = $("#sublist" +currentIndex);
+        list5.append("<li>test</li>" );
 
 
     }
@@ -57,7 +66,7 @@
         var list2 = $("#list2");
         list2.append("<li>" + serviceFolderLinks[index] + "</li>" );
 
-        var list = $("#list");
+        var list = $("#sublist" +currentIndex);
         list.append("<li>" + folderName + "</li>" );
 
 
@@ -68,7 +77,9 @@
 <body>
 
     <ul id="folderList">
-        <ul id="list"></ul>
+        <li>green
+            <ul id="list"><li>red</li></ul>
+        </li>
     </ul>
 
     <ul id="folderLinks">
