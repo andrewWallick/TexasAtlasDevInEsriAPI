@@ -95,6 +95,7 @@
 
         require([
         "esri/map", "esri/layers/ArcGISDynamicMapServiceLayer",
+        "esri/layers/FeatureLayer",
         "esri/layers/DynamicLayerInfo", "esri/layers/LayerDataSource",
         "esri/layers/LayerDrawingOptions", "esri/layers/TableDataSource",
         "esri/Color", "esri/renderers/SimpleRenderer",
@@ -111,6 +112,7 @@
         "dojo/domReady!"
     ], function (
             Map, ArcGISDynamicMapServiceLayer,
+            FeatureLayer,
             DynamicLayerInfo, LayerDataSource,
             LayerDrawingOptions, TableDataSource,
             Color, SimpleRenderer,
@@ -132,8 +134,8 @@
                 slider: false
             });
 
-            var dndSource = new Source("layerList");
-            dndSource.on("DndDrop", reorderLayers);
+            /*var dndSource = new Source("layerList");
+            dndSource.on("DndDrop", reorderLayers);*/
             //
             //                        usaLayer = new ArcGISDynamicMapServiceLayer("http://texasatlas.arch.tamu.edu:6080/arcgis/rest/services/CA/CA14_HWinds_Historic/MapServer", {
             //                            "id": "usa"
@@ -183,7 +185,7 @@
             //                        usaLayer.on("update-end", hideLoading);
             //                        map.addLayer(usaLayer);
 
-            function buildLayerList() {
+            /*function buildLayerList() {
                 dndSource.clearItems();
                 domConstruct.empty(dom.byId("layerList"));
 
@@ -200,9 +202,9 @@
                 }
 
                 dndSource.insertNodes(false, layerNames);
-            }
+            }*/
 
-            function toggleLayer(e) {
+            /*function toggleLayer(e) {
                 showLoading();
                 for (var info in infos) {
                     var i = infos[info];
@@ -216,18 +218,18 @@
                 } else {
                     usaLayer.setDynamicLayerInfos(visible);
                 }
-            }
+            }*/
 
-            function reorderLayers() {
+            /*function reorderLayers() {
                 showLoading();
                 var newOrder = getVisibleLayers();
 
                 usaLayer.setDynamicLayerInfos(newOrder);
-            }
+            }*/
 
 
 
-            function getVisibleLayers() {
+            /*function getVisibleLayers() {
                 // get layer name nodes, build an array corresponding to new layer order
                 var layerOrder = [];
                 query("#layerList .dojoDndItem label").forEach(function (n, idx) {
@@ -250,9 +252,9 @@
                     return dynamicLayerInfos[id];
                 });
                 return visible;
-            }
+            }*/
 
-            function createToggle(name, visible) {
+            /*function createToggle(name, visible) {
                 var div = domConstruct.create("div");
                 var layerVis = domConstruct.create("input", {
                     checked: visible,
@@ -266,16 +268,16 @@
                     innerHTML: name
                 }, div);
                 return div;
-            }
+            }*/
 
-            function showLoading() {
+            /*function showLoading() {
                 domStyle.set(dom.byId("loading"), "display", "inline-block");
             }
 
             function hideLoading() {
                 domStyle.set(dom.byId("loading"), "display", "none");
             }
-
+*/
             //add the basemap gallery, in this case we'll display maps from ArcGIS.com including bing maps
             var basemapGallery = new BasemapGallery({
                 showArcGISBasemaps: true,
@@ -289,12 +291,12 @@
             //end basemap code
 
 
-            function addLayer(data) {
+            /*function addLayer(data) {
 
-                /*var checkedLayer = new ArcGISDynamicMapServiceLayer(fullLink, {
+                var checkedLayer = new ArcGISDynamicMapServiceLayer(fullLink, {
                     "id": data,
                     "opacity": 0.75
-                });*/
+                });
 
                 //map.addLayer(checkedLayer);
                 var statesUrl = "http://texasatlas.arch.tamu.edu:6080/arcgis/rest/services/TA/TA_AdminBdys/MapServer/7";
@@ -303,9 +305,8 @@
                         //outFields: [labelField]
                 });
                 map.addLayer(states);
-            }
+            }*/
 
-            //        $.getJSON("http://texasatlas.arch.tamu.edu:6080/arcgis/rest/services?f=pjson", getFolders);
 
             var pathToRoot = "http://texasatlas.arch.tamu.edu:6080/arcgis/rest/services?f=pjson";
             var folderLinks = [];
@@ -382,28 +383,39 @@
                         });
                         content += "</ul>";
                         layers.append(content); //Appends the giant layer list (stored in content) to #layersList.
-                        initHandlder();
+                        initHandler();
                     }
                 });
 
             });
 
             //work on this part!
-            function initHandlder() {
+            var layerVar;
+            function initHandler() {
                 $("input[type='checkbox']").click(function () {
-                    if ($(this).is(":checked")) {
+                    if ($(this).is("checked")) {
                         var layerID = $(this).parent().attr('layerID');
                         var parentDir = $(this).parent().parent().attr('link'); //gets parent directory
                         var rootDir = $(this).parent().parent().parent().attr('link');
                         var baseDir = rootDir + "/" + parentDir + "/MapServer/" + layerID;
                         fullLink = "http://texasatlas.arch.tamu.edu:6080/arcgis/rest/services/" + baseDir;
-                        var dummy;
-                        addLayer(parentDir);
+
+                        //map.addLayer(fullLink);
+                        createLayer(fullLink, layerName); //MAKE THE layerName
                     } else {
-                        console.log("nothing here");
+                       // map.removeLayer(fullLink);
+                        deleteLayer(layerName);
                     }
                 });
             }
+            function createLayer(directory, id){
+                layerVar = new FeatureLayer(directory, {id: id});
+                map.addLayer(layerVar);
+            }
+            function deleteLayer(layerName){
+                map.removeLayer(layerVar.id=layerName   //It will be something like this. Maybe use hide layer instead - look it up!
+            }
+
         });
     </script>
 
@@ -431,7 +443,7 @@
         </div>
 
         <!--   Start of Table of Contents     -->
-        <div id="draggable" class="shadow">
+        <!--<div id="draggable" class="shadow">
             <h3>Add and Re-order Layers</h3>
             <div id="info">
                 <div id="note">
@@ -443,12 +455,12 @@
                 </div>
 
                 <strong>Map Layers</strong>
-                <img id="loading" src="https://dl.dropboxusercontent.com/u/2654618/loading_black.gif">
+   Loading GIF             <img id="loading" src="https://dl.dropboxusercontent.com/u/2654618/loading_black.gif">
                 <br>
                 <div id="layerList"></div>
 
             </div>
-        </div>
+        </div>-->
         <!--  End Table of Contents          -->
         <div>
             <p>
