@@ -124,8 +124,8 @@
         ) {
             parser.parse();
 
-            var dynamicLayerInfos;
-            var allLayers;
+
+            var allLayers = {};
 
             map = new Map("map", {
                 basemap: "topo",
@@ -134,7 +134,7 @@
                 slider: false
             });
 
-            
+
 
             //add the basemap gallery, in this case we'll display maps from ArcGIS.com including bing maps
             var basemapGallery = new BasemapGallery({
@@ -149,21 +149,7 @@
             //end basemap code
 
 
-            /*function addLayer(data) {
 
-                var checkedLayer = new ArcGISDynamicMapServiceLayer(fullLink, {
-                    "id": data,
-                    "opacity": 0.75
-                });
-
-                //map.addLayer(checkedLayer);
-                var statesUrl = "http://texasatlas.arch.tamu.edu:6080/arcgis/rest/services/TA/TA_AdminBdys/MapServer/7";
-                var states = new FeatureLayer(statesUrl, {
-                    id: data
-                        //outFields: [labelField]
-                });
-                map.addLayer(states);
-            }*/
 
 
             var pathToRoot = "http://texasatlas.arch.tamu.edu:6080/arcgis/rest/services?f=pjson";
@@ -222,7 +208,7 @@
                                                         var layerName = item2.name;
                                                         layerNameCode = encodeURIComponent(layerName);
                                                         content += "<li layerID=" + item2.id + "><input type='checkbox' name=\"" + layerNameCode + "\"><label for=\"" + layerNameCode + "\">" + layerName + "</label></li>";
-                                                        //content += "<li>" + layerName.substring(folderNameLength + 1, layerName.length - 1) + "</li>";
+
 
                                                     });
                                                     content += "</ul>";
@@ -248,8 +234,6 @@
 
             });
 
-            //work on this part!
-
 
             function initHandler() {
                 $("input[type='checkbox']").click(function () {
@@ -262,7 +246,7 @@
                         fullLink = "http://texasatlas.arch.tamu.edu:6080/arcgis/rest/services/" + baseDir;
 
 
-                        createLayer(fullLink, layerName); //MAKE THE layerName
+                        createLayer(fullLink, layerName);
                     } else {
 
                         deleteLayer(layerName);
@@ -307,26 +291,7 @@
 
         </div>
 
-        <!--   Start of Table of Contents     -->
-        <!--<div id="draggable" class="shadow">
-            <h3>Add and Re-order Layers</h3>
-            <div id="info">
-                <div id="note">
-                    Note: This sample requires an ArcGIS Server version 10.1 or later map service.
-                </div>
 
-                <div id="hint">
-                    Click and drag a map layer name below to re-order layers. The first layer in the list will be drawn on top.
-                </div>
-
-                <strong>Map Layers</strong>
-   Loading GIF             <img id="loading" src="https://dl.dropboxusercontent.com/u/2654618/loading_black.gif">
-                <br>
-                <div id="layerList"></div>
-
-            </div>
-        </div>-->
-        <!--  End Table of Contents          -->
         <div>
             <p>
                 This map does the following:
