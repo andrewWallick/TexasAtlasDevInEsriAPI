@@ -238,18 +238,20 @@
             function initHandler() {
                 $("input[type='checkbox']").click(function () {
                     var layerName = decodeURIComponent(this.name);
+                    var layerID = $(this).parent().attr('layerID');
+
+                    var parentDir = $(this).parent().parent().attr('link'); //gets parent directory
+                    var fullLayerID = parentDir + "_" + layerID;
+                    var rootDir = $(this).parent().parent().parent().attr('link');
+                    var baseDir = rootDir + "/" + parentDir + "/MapServer/" + layerID;
+                    fullLink = "http://texasatlas.arch.tamu.edu:6080/arcgis/rest/services/" + baseDir;
+
                     if ($(this).is(":checked")) {
-                        var layerID = $(this).parent().attr('layerID');
-                        var parentDir = $(this).parent().parent().attr('link'); //gets parent directory
-                        var rootDir = $(this).parent().parent().parent().attr('link');
-                        var baseDir = rootDir + "/" + parentDir + "/MapServer/" + layerID;
-                        fullLink = "http://texasatlas.arch.tamu.edu:6080/arcgis/rest/services/" + baseDir;
 
-
-                        createLayer(fullLink, layerName);
+                        createLayer(fullLink, fullLayerID);
                     } else {
 
-                        deleteLayer(layerName);
+                        deleteLayer(fullLayerID);
                     }
                 });
             }
